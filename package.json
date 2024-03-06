@@ -14,11 +14,11 @@
     "dist"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
-    "start": "tsup --watch",
-    "build": "tsup && tsc --noEmit false --emitDeclarationOnly --declaration --outFile dist/index.d.ts",
+    "start": "tsup-node src --watch",
+    "build": "tsup-node",
     "lint": "eslint --ext .ts,.tsx src",
     "test": "tsc --noEmit",
     "prepare": "yarn build"
@@ -56,14 +56,6 @@
     "@mui/icons-material": "5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "splitting": false,
-    "sourcemap": false,
-    "clean": true
   },
   "resolutions": {
     "strip-ansi": "6.0.1"

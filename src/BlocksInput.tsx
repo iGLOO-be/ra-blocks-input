@@ -30,7 +30,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { nanoid } from "nanoid";
 import styles from "./BlocksInput.module.css";
-import { entries } from "lodash/";
+import { entries } from "lodash";
 
 export type DefaultContext = {
   id: string;
