@@ -9,6 +9,7 @@
   },
   "author": "igloo.be",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
