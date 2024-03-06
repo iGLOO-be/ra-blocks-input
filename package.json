@@ -3,6 +3,10 @@
   "license": "MIT",
   "name": "@igloo-be/ra-blocks-input",
   "description": "Input blocks for react-admin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iGLOO-be/ra-blocks-input.git"
+  },
   "author": "igloo.be",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
