@@ -1,0 +1,17 @@
+.blockForm :global(.RaSimpleFormIterator-line) {
+  flex-direction: column;
+
+  @apply rounded-sm border-2 border-dashed border-white p-2;
+}
+
+.blockForm :global(.RaSimpleFormIterator-form) {
+  align-items: normal !important;
+}
+
+.blockForm :global(.RaSimpleFormIterator-line):hover {
+  @apply border-blue-500 border-opacity-35;
+}
+
+.blockForm :global(.RaArrayInput-label) {
+  @apply text-lg font-semibold;
+}
