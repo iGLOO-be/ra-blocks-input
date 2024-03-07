@@ -72,3 +72,16 @@ export const blockText: BlockDefinition = {
   },
 };
 ```
+
+Specify the type of data and context
+
+```ts
+BlockDefinition<
+  {
+    text: string;
+  },
+  {
+    foo?: string;
+  }
+>
+```
