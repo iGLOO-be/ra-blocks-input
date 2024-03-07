@@ -2,7 +2,7 @@ import { TextInput } from "react-admin";
 import { BlockDefinition, BlockRecord } from "../../../src/types";
 
 export const blockText: BlockDefinition<
-  BlockRecord<"text", { text: string }>,
+  { text: string },
   { title?: string } | undefined
 > = {
   id: "text",
@@ -13,10 +13,10 @@ export const blockText: BlockDefinition<
   FormComponent: () => {
     return <TextInput source="text" multiline fullWidth />;
   },
-  PreviewComponent: ({ block, context }) => {
+  PreviewComponent: ({ block: { data }, context }) => {
     return (
       <div style={{ border: "1px solid green" }}>
-        <p>{block.data?.text}</p>
+        <p>{data?.text}</p>
         {!!context?.title && <p>Context title: {context.title}</p>}
       </div>
     );

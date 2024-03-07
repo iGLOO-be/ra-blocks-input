@@ -28,10 +28,28 @@ module.exports = {
 
 ```tsx
 <SimpleForm>
+  // Basic
+  <BlocksInput
+    source="blocks"
+    blockDefinitions={[blockText]}
+  />
+
+  // With context: id and label are required
   <BlocksInput
     source="blocks"
     blockDefinitions={[blockText]}
     contexts={[{ id: "default", label: "Default" }]}
+    defaultContextId="default"
+  />
+
+  // Specify additional context properties
+  <BlocksInput<{ foo?: string }>
+    source="blocks"
+    blockDefinitions={[blockText]}
+    contexts={[
+      { id: "default", label: "Default" },
+      { id: "other", label: "Other", foo: "bar" }
+    ]}
     defaultContextId="default"
   />
 </SimpleForm>
@@ -39,10 +57,7 @@ module.exports = {
 
 ## Block definitions
 
-```ts
-import { TextInput } from "react-admin";
-import { BlockDefinition } from "../../../src/types";
-
+```tsx
 export const blockText: BlockDefinition = {
   id: "text",
   label: "Text",
@@ -52,10 +67,8 @@ export const blockText: BlockDefinition = {
   FormComponent: () => {
     return <TextInput source="text" multiline />;
   },
-  PreviewComponent: ({ block }) => {
-    return <div style={{ border: "1px solid green"}}>{block.data?.text}</div>;
+  PreviewComponent: ({ block, context }) => {
+    return <div>{block.data?.text}</div>;
   },
 };
-
-export default blockText;
 ```

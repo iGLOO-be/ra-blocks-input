@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { useFieldArray } from "react-hook-form";
+import { DefaultValues, useFieldArray } from "react-hook-form";
 import { BlockDefinition, BlockRecord } from "./types";
 import clsx from "clsx";
 import { Button, Dialog, IconButton, alpha } from "@mui/material";
@@ -40,7 +40,7 @@ export type DefaultContext = {
 type NonUndefined<T> = T extends undefined ? never : T;
 
 const useBlockInput = <
-  T extends BlockRecord,
+  P extends Record<string, any>,
   C extends DefaultContext | undefined,
 >({
   source,
@@ -49,7 +49,7 @@ const useBlockInput = <
   contexts = [],
 }: {
   source: string;
-  blockDefinitions: Array<BlockDefinition<T, C>>;
+  blockDefinitions: Array<BlockDefinition<P, C>>;
   defaultContextId?: string;
   contexts?: NonUndefined<C>[];
 }) => {
@@ -62,7 +62,7 @@ const useBlockInput = <
   const { fields, remove, move, append, insert } = useFieldArray({
     name: source,
   });
-  const blocks: T[] = fields as any;
+  const blocks: BlockRecord[] = fields as any;
 
   const [isCreateBlockDialogOpen, setIsCreateBlockDialogOpen] =
     React.useState(false);
@@ -105,7 +105,7 @@ const useBlockInput = <
     React.useState<
       | {
           blockDefinitionId: string;
-          blockData: T["data"];
+          blockData: P;
           blockId?: string;
         }
       | undefined
@@ -117,13 +117,13 @@ const useBlockInput = <
     setEditBlockDefinitionState(undefined);
   }, []);
   const onBlockFormSave = useCallback(
-    (values: T["data"]) => {
+    (values: P) => {
       onBlockFormClose();
 
       const newBlock = {
         type: editBlockDefinitionState?.blockDefinitionId || "",
         data: values,
-      } as T;
+      } as BlockRecord;
 
       if (editBlockDefinitionState?.blockId) {
         const prevIndex = blocks.findIndex(
@@ -232,7 +232,7 @@ export const BlocksInput = <C extends Record<string, any> | undefined>({
   contexts,
 }: {
   source: string;
-  blockDefinitions: BlockDefinition<BlockRecord, any>[];
+  blockDefinitions: BlockDefinition<any, any>[];
   defaultContextId?: string;
   contexts?: NonUndefined<
     C extends undefined ? DefaultContext : DefaultContext & C
@@ -874,7 +874,7 @@ const EditBlockDialog = () => {
 };
 
 const EditBlockDialogForm = <
-  T extends BlockRecord,
+  P extends Record<string, any>,
   C extends DefaultContext | undefined,
 >({
   blockDefinition,
@@ -882,14 +882,14 @@ const EditBlockDialogForm = <
   onCancel,
   onSave,
 }: {
-  blockDefinition: BlockDefinition<T, C> | undefined;
-  initialValues?: T["data"];
+  blockDefinition: BlockDefinition<P, C> | undefined;
+  initialValues?: DefaultValues<P>;
   onCancel: () => void;
-  onSave: (values: T["data"]) => void;
+  onSave: (values: P) => void;
 }) => {
   const { context, contexts, onContextChange } = useBlockInputContext();
   const form = useForm({
-    defaultValues: initialValues as any,
+    defaultValues: initialValues,
   });
   form.watch();
   const { handleSubmit } = form;
@@ -997,7 +997,7 @@ const EditBlockDialogForm = <
                       {
                         type: blockDefinition.id,
                         data: form.getValues(),
-                      } as T
+                      } as BlockRecord
                     }
                     context={context as any}
                   />
