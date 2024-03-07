@@ -35,26 +35,28 @@ import { entries } from "lodash";
 export type DefaultContext = {
   id: string;
   label: string;
+  [key: string]: any;
 };
+type NonUndefined<T> = T extends undefined ? never : T;
 
-const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
+const useBlockInput = <
+  T extends BlockRecord,
+  C extends DefaultContext | undefined,
+>({
   source,
   blockDefinitions,
   defaultContextId,
-  contexts,
+  contexts = [],
 }: {
   source: string;
-  blockDefinitions: Array<BlockDefinition<C, T>>;
-  defaultContextId: string;
-  contexts: C[];
+  blockDefinitions: Array<BlockDefinition<T, C>>;
+  defaultContextId?: string;
+  contexts?: NonUndefined<C>[];
 }) => {
-  const [contextId, setContextId] = React.useState(
-    defaultContextId || contexts[0]?.id
+  const [contextId, setContextId] = React.useState<string | undefined>(
+    defaultContextId || contexts?.[0]?.id,
   );
-  const context = contexts.find((c) => c.id === contextId);
-  if (!context) {
-    throw new Error("Context not found");
-  }
+  const context: C | undefined = contexts.find((c) => c.id === contextId);
   const onContextChange = setContextId;
 
   const { fields, remove, move, append, insert } = useFieldArray({
@@ -67,7 +69,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
   const onBlockCreate = useCallback(
     (blockDefinitionId: string) => {
       const blockDefinition = blockDefinitions.find(
-        (bd) => bd.id === blockDefinitionId
+        (bd) => bd.id === blockDefinitionId,
       );
       if (!blockDefinition) {
         return;
@@ -90,7 +92,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
         });
       }
     },
-    [append, blockDefinitions]
+    [append, blockDefinitions],
   );
   const onCreateBlockRequest = useCallback(() => {
     setIsCreateBlockDialogOpen(true);
@@ -109,7 +111,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
       | undefined
     >(undefined);
   const editBlockDefinition = blockDefinitions.find(
-    (bd) => bd.id === editBlockDefinitionState?.blockDefinitionId
+    (bd) => bd.id === editBlockDefinitionState?.blockDefinitionId,
   );
   const onBlockFormClose = useCallback(() => {
     setEditBlockDefinitionState(undefined);
@@ -125,7 +127,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
 
       if (editBlockDefinitionState?.blockId) {
         const prevIndex = blocks.findIndex(
-          (block) => block.id === editBlockDefinitionState?.blockId
+          (block) => block.id === editBlockDefinitionState?.blockId,
         );
         if (prevIndex !== -1) {
           remove(prevIndex);
@@ -135,12 +137,19 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
       }
       append(newBlock);
     },
-    [append, insert, remove, onBlockFormClose, blocks, editBlockDefinitionState]
+    [
+      append,
+      insert,
+      remove,
+      onBlockFormClose,
+      blocks,
+      editBlockDefinitionState,
+    ],
   );
   const onBlockEdit = useCallback(
     (index: number) => {
       const blockDefinition = blockDefinitions.find(
-        (bd) => bd.id === blocks[index].type
+        (bd) => bd.id === blocks[index].type,
       );
       if (!blockDefinition || !blockDefinition.FormComponent) {
         return;
@@ -151,7 +160,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
         blockId: blocks[index].id,
       });
     },
-    [blocks, blockDefinitions]
+    [blocks, blockDefinitions],
   );
 
   const onBlockMove = move;
@@ -162,7 +171,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
       }
       move(index, index - 1);
     },
-    [move]
+    [move],
   );
   const onBlockDown = useCallback(
     (index: number) => {
@@ -171,7 +180,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
       }
       move(index, index + 1);
     },
-    [move, blocks]
+    [move, blocks],
   );
   const onBlockDelete = useCallback(
     (index: number) => {
@@ -179,7 +188,7 @@ const useBlockInput = <T extends BlockRecord, C extends DefaultContext>({
         remove(index);
       }
     },
-    [remove]
+    [remove],
   );
 
   return {
@@ -210,27 +219,29 @@ const useBlockInputContext = () => {
   const context = useContext(blockInputContext);
   if (!context) {
     throw new Error(
-      "useBlockInputContext must be used within a BlocksInput component"
+      "useBlockInputContext must be used within a BlocksInput component",
     );
   }
   return context;
 };
 
-export const BlocksInput = <
-  C extends DefaultContext,
-  T extends BlockRecord = BlockRecord
->({
+export const BlocksInput = <C extends Record<string, any> | undefined>({
   source,
   blockDefinitions,
   defaultContextId,
   contexts,
 }: {
   source: string;
-  blockDefinitions: Array<BlockDefinition<C, T>>;
-  defaultContextId: string;
-  contexts: C[];
+  blockDefinitions: BlockDefinition<BlockRecord, any>[];
+  defaultContextId?: string;
+  contexts?: NonUndefined<
+    C extends undefined ? DefaultContext : DefaultContext & C
+  >[];
 }) => {
-  const blockInput = useBlockInput<T, C>({
+  const blockInput = useBlockInput<
+    BlockRecord,
+    C extends undefined ? any : DefaultContext & C
+  >({
     source,
     blockDefinitions,
     defaultContextId,
@@ -259,9 +270,9 @@ const BlocksInputView = () => {
 };
 
 const Header = () => (
-  <div className="flex justify-between items-center mb-4">
-    <ContextSelector />
+  <div className="flex flex-row-reverse justify-between items-center mb-4">
     <CreateBlockButton />
+    <ContextSelector />
   </div>
 );
 
@@ -281,7 +292,7 @@ const ContextSelector = () => {
         onContextChange(context.id);
       }
     },
-    [contexts, onContextChange]
+    [contexts, onContextChange],
   );
   const renderContext = useCallback((context: DefaultContext) => {
     return (
@@ -290,9 +301,14 @@ const ContextSelector = () => {
       </option>
     );
   }, []);
+
+  if (!contexts.length) {
+    return null;
+  }
+
   return (
     <select
-      value={context.id}
+      value={context?.id}
       onChange={(e) => onChange(e)}
       className="border border-gray-300 rounded-md p-2"
     >
@@ -309,7 +325,7 @@ const CreateBlockButton = () => {
       e.stopPropagation();
       onCreateBlockRequest();
     },
-    [onCreateBlockRequest]
+    [onCreateBlockRequest],
   );
   return (
     <Button
@@ -344,7 +360,7 @@ const PreviewBlocks = () => {
   const renderBlock = useCallback(
     (block: BlockRecord, index: number) => {
       const blockDefinition = blockDefinitions.find(
-        (bd) => bd.id === block.type
+        (bd) => bd.id === block.type,
       );
       if (!blockDefinition) {
         return null;
@@ -377,7 +393,7 @@ const PreviewBlocks = () => {
       onBlockDown,
       onBlockDelete,
       selectedBlockId,
-    ]
+    ],
   );
 
   const ref = useRef<HTMLDivElement>(null);
@@ -444,7 +460,7 @@ const PreviewBlock = <T extends BlockRecord, C extends DefaultContext>({
   onDown,
   onDelete,
 }: {
-  blockDefinition: BlockDefinition<C, T>;
+  blockDefinition: BlockDefinition<T, C>;
   block: T;
   index: number;
   onSelect: () => void;
@@ -545,7 +561,7 @@ const PreviewBlock = <T extends BlockRecord, C extends DefaultContext>({
       onDoubleClick={onEdit}
       className={clsx(
         "relative group cursor-pointer transition-transform",
-        isSelected && "shadow-md"
+        isSelected && "shadow-md",
         // Scale seems to make overflow hidden
         // isSelected && "scale-[1.01]"
       )}
@@ -727,20 +743,23 @@ const CreateBlockDialog = () => {
   const groupedBlockDefinitions = entries(
     blockDefinitions
       .filter((blockDefinition) => !blockDefinition.disableInsert)
-      .reduce((acc, blockDefinition) => {
-        if (blockDefinition.group) {
-          if (!acc[blockDefinition.group]) {
-            acc[blockDefinition.group] = [];
+      .reduce(
+        (acc, blockDefinition) => {
+          if (blockDefinition.group) {
+            if (!acc[blockDefinition.group]) {
+              acc[blockDefinition.group] = [];
+            }
+            acc[blockDefinition.group].push(blockDefinition);
+          } else {
+            if (!acc[""]) {
+              acc[""] = [];
+            }
+            acc[""].push(blockDefinition);
           }
-          acc[blockDefinition.group].push(blockDefinition);
-        } else {
-          if (!acc[""]) {
-            acc[""] = [];
-          }
-          acc[""].push(blockDefinition);
-        }
-        return acc;
-      }, {} as Record<string, BlockDefinition[]>)
+          return acc;
+        },
+        {} as Record<string, BlockDefinition[]>,
+      ),
   );
 
   const onSelect = useCallback(
@@ -748,7 +767,7 @@ const CreateBlockDialog = () => {
       onBlockCreate(blockDefinitionId);
       onCloseCreateBlockDialog();
     },
-    [onBlockCreate, onCloseCreateBlockDialog]
+    [onBlockCreate, onCloseCreateBlockDialog],
   );
   const renderOption = useCallback(
     (blockDefinition: BlockDefinition) => {
@@ -760,7 +779,7 @@ const CreateBlockDialog = () => {
         />
       );
     },
-    [onSelect]
+    [onSelect],
   );
 
   return (
@@ -814,7 +833,7 @@ const CreateBlockDialogCard = ({
       e.stopPropagation();
       onSelect(blockDefinition.id);
     },
-    [blockDefinition.id, onSelect]
+    [blockDefinition.id, onSelect],
   );
   return (
     <button
@@ -854,13 +873,16 @@ const EditBlockDialog = () => {
   );
 };
 
-const EditBlockDialogForm = <T extends BlockRecord, C extends DefaultContext>({
+const EditBlockDialogForm = <
+  T extends BlockRecord,
+  C extends DefaultContext | undefined,
+>({
   blockDefinition,
   initialValues,
   onCancel,
   onSave,
 }: {
-  blockDefinition: BlockDefinition<C, T> | undefined;
+  blockDefinition: BlockDefinition<T, C> | undefined;
   initialValues?: T["data"];
   onCancel: () => void;
   onSave: (values: T["data"]) => void;
@@ -955,7 +977,7 @@ const EditBlockDialogForm = <T extends BlockRecord, C extends DefaultContext>({
               "flex-1",
               "overflow-auto",
               "border-l",
-              "border-gray-200"
+              "border-gray-200",
             )}
           >
             <div className="flex items-center justify-between border-b border-gray-200 p-5">
@@ -977,7 +999,7 @@ const EditBlockDialogForm = <T extends BlockRecord, C extends DefaultContext>({
                         data: form.getValues(),
                       } as T
                     }
-                    context={context as C}
+                    context={context as any}
                   />
                 </CustomErrorBoundary>
               )}

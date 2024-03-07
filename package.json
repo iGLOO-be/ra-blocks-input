@@ -22,7 +22,8 @@
     "build": "tsup-node",
     "lint": "eslint --ext .ts,.tsx src",
     "test": "tsc --noEmit",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "demo": "cd demo && yarn dev"
   },
   "devDependencies": {
     "@mui/icons-material": "5",

@@ -17,19 +17,19 @@ export type BlockForm<C = DefaultContext> = ComponentType<{
   form: UseFormReturn;
 }>;
 
-export interface BlockDefinition<C = DefaultContext, T extends BlockRecord = BlockRecord> {
+export interface BlockDefinition<T extends BlockRecord = BlockRecord, C extends (Record<string, any> | undefined) = any> {
   id: IBlockTypes<T>;
   group?: string;
   label: string;
-  FormComponent?: BlockForm<C>;
+  FormComponent?: BlockForm<C extends undefined ? undefined : DefaultContext & C>;
   formDefaultValue?: any;
   disableInsert?: boolean;
-  PreviewComponent?: IPreviewComponent<C, T>;
+  PreviewComponent?: IPreviewComponent<T, C extends undefined ? undefined : DefaultContext & C>;
 }
 
 export type IPreviewComponent<
-  C = DefaultContext,
   T extends BlockRecord = BlockRecord,
+  C extends (DefaultContext | undefined) = undefined,
 > = ComponentType<{
   block: T;
   context: C;

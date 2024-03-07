@@ -24,10 +24,16 @@ export const PagesEdit: React.FC = () => {
     <Edit>
       <SimpleForm>
         <TextInput source="name" />
+        <div className="mb-7 w-full">
+          <BlocksInput source="blocks" blockDefinitions={[blockText]} />
+        </div>
         <BlocksInput
-          source="blocks"
+          source="blocksWithContext"
           blockDefinitions={[blockText]}
-          contexts={[{ id: "default", label: "Default" }]}
+          contexts={[
+            { id: "default", label: "Default", title: "Default Context" },
+            { id: "other", label: "Other", title: "other Context" },
+          ]}
           defaultContextId="default"
         />
       </SimpleForm>
