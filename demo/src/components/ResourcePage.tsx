@@ -9,6 +9,7 @@ import {
 } from "react-admin";
 import { BlocksInput } from "@igloo-be/ra-blocks-input";
 import blockText from "./BlockText";
+import blockList from "./BlockList";
 
 export const PagesList: React.FC = () => (
   <List>
@@ -29,7 +30,7 @@ export const PagesEdit: React.FC = () => {
         </div>
         <BlocksInput
           source="blocksWithContext"
-          blockDefinitions={[blockText]}
+          blockDefinitions={[blockText, blockList]}
           contexts={[
             { id: "default", label: "Default", title: "Default Context" },
             { id: "other", label: "Other", title: "other Context" },
