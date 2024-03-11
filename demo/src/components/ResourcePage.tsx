@@ -2,13 +2,15 @@ import React from "react";
 import {
   Datagrid,
   Edit,
+  FormTab,
   List,
-  SimpleForm,
+  TabbedForm,
   TextField,
   TextInput,
 } from "react-admin";
 import { BlocksInput } from "@igloo-be/ra-blocks-input";
 import blockText from "./BlockText";
+import blockList from "./BlockList";
 
 export const PagesList: React.FC = () => (
   <List>
@@ -19,24 +21,30 @@ export const PagesList: React.FC = () => (
   </List>
 );
 
+const blockDefinitions = [blockText, blockList];
+
 export const PagesEdit: React.FC = () => {
   return (
     <Edit>
-      <SimpleForm>
-        <TextInput source="name" />
-        <div className="mb-7 w-full">
-          <BlocksInput source="blocks" blockDefinitions={[blockText]} />
-        </div>
-        <BlocksInput
-          source="blocksWithContext"
-          blockDefinitions={[blockText]}
-          contexts={[
-            { id: "default", label: "Default", title: "Default Context" },
-            { id: "other", label: "Other", title: "other Context" },
-          ]}
-          defaultContextId="default"
-        />
-      </SimpleForm>
+      <TabbedForm>
+        <FormTab label="Details">
+          <TextInput source="name" />
+        </FormTab>
+        <FormTab label="Without context">
+          <BlocksInput source="blocks" blockDefinitions={blockDefinitions} />
+        </FormTab>
+        <FormTab label="With contexts">
+          <BlocksInput
+            source="blocksWithContext"
+            blockDefinitions={blockDefinitions}
+            contexts={[
+              { id: "default", label: "Default", title: "Default Context" },
+              { id: "other", label: "Other", title: "other Context" },
+            ]}
+            defaultContextId="default"
+          />
+        </FormTab>
+      </TabbedForm>
     </Edit>
   );
 };

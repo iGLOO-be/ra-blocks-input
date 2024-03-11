@@ -15,7 +15,7 @@ import React, {
 import { DefaultValues, useFieldArray } from "react-hook-form";
 import { BlockDefinition, BlockRecord } from "./types";
 import clsx from "clsx";
-import { Button, Dialog, IconButton, alpha } from "@mui/material";
+import { Box, Button, Dialog, IconButton, alpha, styled } from "@mui/material";
 import {
   Add,
   ArrowDownward,
@@ -29,7 +29,6 @@ import {
 import { useForm, FormProvider } from "react-hook-form";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { nanoid } from "nanoid";
-import styles from "./BlocksInput.module.css";
 import { entries } from "lodash";
 
 export type DefaultContext = {
@@ -647,7 +646,7 @@ const PreviewBlockActions = ({
       <IconButton
         size="small"
         sx={{
-          marginRight: 15,
+          marginRight: "15px",
           color: "#D32F2F",
           borderColor: "#D32F2F",
           "&:hover": {
@@ -671,7 +670,7 @@ const PreviewBlockActions = ({
       {allowEdit && (
         <Button
           sx={{
-            marginRight: 15,
+            marginRight: "15px",
           }}
           color="primary"
           size="small"
@@ -873,6 +872,25 @@ const EditBlockDialog = () => {
   );
 };
 
+const FormContainer = styled(Box)(({ theme }) => ({
+  "& .RaSimpleFormIterator-line": {
+    flexDirection: "column",
+    borderRadius: "5px",
+    border: "2px dashed white",
+    padding: "10px",
+  },
+  "& .RaSimpleFormIterator-form": {
+    alignItems: "normal !important",
+  },
+  "& .RaSimpleFormIterator-line:hover": {
+    border: `1px dashed ${theme.palette.primary.main}`,
+  },
+  "& .RaArrayInput-label": {
+    fontSize: "16px",
+    fontWeight: "bold",
+  },
+}));
+
 const EditBlockDialogForm = <
   P extends Record<string, any>,
   C extends DefaultContext | undefined,
@@ -904,7 +922,7 @@ const EditBlockDialogForm = <
   return (
     <FormProvider {...form}>
       <form
-        className={`flex flex-col flex-1 overflow-hidden ${styles.blockForm}`}
+        className="flex flex-col flex-1 overflow-hidden"
         onSubmit={handleSubmit((values) => {
           onSave(values);
         })}
@@ -919,7 +937,7 @@ const EditBlockDialogForm = <
               sx={{
                 fontSize: 12,
                 padding: "10px 15px",
-                marginRight: 15,
+                marginRight: "15px",
               }}
               color="primary"
             >
@@ -950,12 +968,14 @@ const EditBlockDialogForm = <
             className="flex"
           >
             <div className="p-5 flex-1">
-              <FormComponent
-                context={context as any}
-                contexts={contexts as any}
-                onContextChange={onContextChange}
-                form={form}
-              />
+              <FormContainer>
+                <FormComponent
+                  context={context as any}
+                  contexts={contexts as any}
+                  onContextChange={onContextChange}
+                  form={form}
+                />
+              </FormContainer>
             </div>
           </Panel>
           <PanelResizeHandle
