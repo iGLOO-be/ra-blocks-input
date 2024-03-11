@@ -25,7 +25,7 @@ export interface BlockDefinition<
   FormComponent?: BlockForm<
     C extends undefined ? undefined : DefaultContext & C
   >;
-  formDefaultValue?: any;
+  formDefaultValue?: Partial<P>;
   disableInsert?: boolean;
   PreviewComponent?: IPreviewComponent<
     BlockRecord<any, P>,
