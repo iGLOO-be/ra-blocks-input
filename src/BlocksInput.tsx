@@ -646,7 +646,7 @@ const PreviewBlockActions = ({
       <IconButton
         size="small"
         sx={{
-          marginRight: 15,
+          marginRight: "15px",
           color: "#D32F2F",
           borderColor: "#D32F2F",
           "&:hover": {
@@ -670,7 +670,7 @@ const PreviewBlockActions = ({
       {allowEdit && (
         <Button
           sx={{
-            marginRight: 15,
+            marginRight: "15px",
           }}
           color="primary"
           size="small"
@@ -937,7 +937,7 @@ const EditBlockDialogForm = <
               sx={{
                 fontSize: 12,
                 padding: "10px 15px",
-                marginRight: 15,
+                marginRight: "15px",
               }}
               color="primary"
             >
