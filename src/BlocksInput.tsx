@@ -83,7 +83,7 @@ const useBlockInput = <
       if (blockDefinition.FormComponent) {
         setEditBlockDefinitionState({
           blockDefinitionId: blockDefinitionId,
-          blockData: newBlockData,
+          blockData: newBlockData as any,
         });
       } else {
         append({
