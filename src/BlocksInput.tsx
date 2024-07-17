@@ -29,7 +29,6 @@ import {
 import { useForm, FormProvider } from "react-hook-form";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { nanoid } from "nanoid";
-import { entries } from "lodash";
 
 export type DefaultContext = {
   id: string;
@@ -739,7 +738,7 @@ const CreateBlockDialog = () => {
     onCloseCreateBlockDialog,
   } = useBlockInputContext();
 
-  const groupedBlockDefinitions = entries(
+  const groupedBlockDefinitions = Object.entries(
     blockDefinitions
       .filter((blockDefinition) => !blockDefinition.disableInsert)
       .reduce(
