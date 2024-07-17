@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5-alpha.0",
   "license": "MIT",
   "name": "@igloo-be/ra-blocks-input",
   "description": "Input blocks for react-admin",
