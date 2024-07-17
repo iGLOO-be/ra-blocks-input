@@ -15,17 +15,20 @@ import React, {
 import { DefaultValues, useFieldArray } from "react-hook-form";
 import { BlockDefinition, BlockRecord } from "./types";
 import clsx from "clsx";
-import { Box, Button, Dialog, IconButton, alpha, styled } from "@mui/material";
-import {
-  Add,
-  ArrowDownward,
-  ArrowUpward,
-  Check,
-  Close,
-  Delete,
-  Edit,
-  Visibility,
-} from "@mui/icons-material";
+import styled from "@mui/material/styles/styled";
+import { alpha } from "@mui/system/colorManipulator";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import IconButton from "@mui/material/IconButton";
+import Add from "@mui/icons-material/Add";
+import ArrowDownward from "@mui/icons-material/ArrowDownward";
+import ArrowUpward from "@mui/icons-material/ArrowUpward";
+import Check from "@mui/icons-material/Check";
+import Close from "@mui/icons-material/Close";
+import Delete from "@mui/icons-material/Delete";
+import Edit from "@mui/icons-material/Edit";
+import Visibility from "@mui/icons-material/Visibility";
 import { useForm, FormProvider } from "react-hook-form";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { nanoid } from "nanoid";
