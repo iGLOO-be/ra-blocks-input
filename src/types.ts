@@ -1,6 +1,22 @@
 import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { DefaultContext } from "./BlocksInput";
+
+export type NonUndefined<T> = T extends undefined ? never : T;
+
+export type DefaultContext = {
+  id: string;
+  label: string;
+  [key: string]: any;
+};
+
+export type BlockInputProps<C extends Record<string, any> | undefined> = {
+  source: string;
+  blockDefinitions: BlockDefinition<any, any>[];
+  defaultContextId?: string;
+  contexts?: NonUndefined<
+    C extends undefined ? DefaultContext : DefaultContext & C
+  >[];
+};
 
 export interface BlockRecord<Type extends string = any, Data = any> {
   type: Type;
