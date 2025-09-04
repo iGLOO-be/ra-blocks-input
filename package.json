@@ -46,6 +46,7 @@
     "react-dnd-html5-backend": "^16",
     "react-dom": "^19",
     "react-hook-form": "^7.62.0",
+    "tslib": "^2.8.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
   },

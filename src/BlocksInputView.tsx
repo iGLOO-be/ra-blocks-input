@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DefaultValues, FormProvider, useForm } from "react-hook-form";
 import { BlockDefinition, BlockRecord, DefaultContext } from "./types";
 import clsx from "clsx";
-import { alpha } from "@mui/system/colorManipulator";
+import { alpha } from "@mui/material/styles";
 import Box, { BoxProps } from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
