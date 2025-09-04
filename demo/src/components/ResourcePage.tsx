@@ -8,7 +8,7 @@ import {
   TextField,
   TextInput,
 } from "react-admin";
-import { BlocksInput } from "@igloo-be/ra-blocks-input";
+import { BlocksInputWhitoutDndContext as BlocksInput } from "@igloo-be/ra-blocks-input";
 import blockText from "./BlockText";
 import blockList from "./BlockList";
 

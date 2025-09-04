@@ -10,4 +10,5 @@ export default defineConfig({
   splitting: false,
   format: ["cjs", "esm"],
   injectStyle: false,
+  external: ["react", "react-dnd", "react-dnd-html5-backend", "dnd-core", "react-hook-form"],
 });

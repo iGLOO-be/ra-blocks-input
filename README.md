@@ -3,12 +3,16 @@
 ## Installation
 
 ```sh
-npm install @igloo-be/ra-blocks-input
+npm install @igloo-be/ra-blocks-input react-dnd react-dnd-html5-backend
 # or
-yarn add @igloo-be/ra-blocks-input
+yarn add @igloo-be/ra-blocks-input react-dnd react-dnd-html5-backend
+# or
+pnpm add @igloo-be/ra-blocks-input react-dnd react-dnd-html5-backend
 ```
 
 ### CSS
+
+#### Tailwind v3
 
 tailwind.config.js
 ```js
@@ -22,6 +26,14 @@ module.exports = {
   },
   plugins: [],
 }
+```
+
+#### Tailwind v4
+
+global.css
+```css
+@import "tailwindcss";
+@source "../../node_modules/@igloo-be/ra-blocks-input/dist/*.{js,mjs}";
 ```
 
 ## Usage
